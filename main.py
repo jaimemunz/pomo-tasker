@@ -1,4 +1,5 @@
 from Tkinter import *
+from timer import Timer
 
 class App:
     
@@ -6,27 +7,36 @@ class App:
         frame = Frame(master)
         frame.pack()
         self.task_list = []
+        self.timer = Timer()
+        
 
         # Create text widget to display list
-        self.task_display = Text(frame, spacing1=1)
-        self.task_display.grid(row=0, sticky=N)
+        self.task_display = Text(frame, spacing1=1, height=10, width=70)
+        self.task_display.grid(row=0, column=0, sticky=N)
         self.task_display.config(state=DISABLED)
 
         # Entry widget
-        self.e = Entry(frame, width = 100)
-        self.e.grid(row =1,column=0,sticky=W)
+        self.e = Entry(frame, width=93)
+        self.e.grid(row =1, sticky=W)
 
         # Add task button
         self.b = Button(frame, text="Add Task", width=10, command=self.get_entry)
+        self.e.bind("<Return>", self.get_entry)
         self.b.grid(row=1, column=2, sticky=W)
 
+        # Timer text
+        self.timer_display = Text(frame, height=5,width=10)
+        self.timer_display.insert(END, self.timer.time)
+        self.timer_display.grid(row=0, column=1)
+
+        
         # Quit button
         self.quit_button = Button(
             frame, text = "QUIT", fg="red", command=frame.quit
             )
         self.quit_button.grid(row=2, padx=5, sticky=S)
 
-    def get_entry(self):
+    def get_entry(self, event=None):
         # Gets task from entry widget
         self.task_list.append(self.e.get())
         self.e.delete(0,END)
