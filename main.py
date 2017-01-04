@@ -41,7 +41,7 @@ class App:
         """
         self.e = Entry(frame, width=93)
         self.e.bind("<Return>", self.get_entry)
-        self.e.grid(row =1, column=0, sticky=W)
+        self.e.grid(row =1, column=0, pady=10, sticky=W)
 
     def add_task_button(self, frame):
         """
@@ -76,7 +76,7 @@ class App:
             frame, text = "QUIT", fg="red",
             command=frame.quit
             )
-        self.quit_button.grid(row=3, column=1, padx=5)    
+        self.quit_button.grid(row=2, column=1)    
    
 
 root = Tk()
