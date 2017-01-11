@@ -3,7 +3,7 @@ import time
 
 class Timer:
 
-    def __init__(self, master, t_var, task_time=5):
+    def __init__(self, master, t_var, task_time=60):
         self.task_length = task_time
         self.root = master
         self.timer_var = StringVar()
@@ -24,7 +24,9 @@ class Timer:
             frame, width=10,font=16,
             textvariable=self.timer_var
         )
-        self.timer_var.set(25)
+        mins, secs = divmod(self.task_length, 60)
+        timeformat = '{:02d}:{:02d}'.format(mins, secs)
+        self.timer_var.set(timeformat)
         self.timer_display.grid(row=0, column=1)
 
     def start_timer_button(self, frame):
