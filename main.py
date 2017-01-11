@@ -1,5 +1,6 @@
 from Tkinter import *
 from timer import Timer
+from tasks import Task
 import time
 
 class App:
@@ -7,9 +8,9 @@ class App:
     def __init__(self, master):
         frame = Frame(master)
         frame.pack()
-        self.task_list = []
         self.timer_var = StringVar()
         self.task_time = 25
+        self.task_manager = Task()
         self.timer_main = Timer(frame, self.timer_var)
 
         # Create text widget to display list
@@ -17,6 +18,9 @@ class App:
         
         # Entry widget
         self.task_entry(frame)
+
+        # Task time entry widget
+        self.task_time_entry(frame)
 
         # Add task button
         self.add_task_button(frame)
@@ -39,9 +43,17 @@ class App:
         """
         Creates entry widget to add taks to list
         """
-        self.e = Entry(frame, width=93)
-        self.e.bind("<Return>", self.get_entry)
-        self.e.grid(row =1, column=0, pady=10, sticky=W)
+        self.task_entry_box = Entry(frame, width=93)
+        self.task_entry_box.bind("<Return>", self.get_entry)
+        self.task_entry_box.grid(row =1, column=0, pady=10, sticky=W)
+
+    def task_time_entry(self, frame):
+        """
+        Creates entry widget to add the time a task should run for
+        """
+        self.time_entry = Entry(frame, width=16)
+        self.time_entry.bind("<Return>", self.get_entry)
+        self.time_entry.grid(row=1, column=0, sticky=E)
 
     def add_task_button(self, frame):
         """
@@ -56,21 +68,24 @@ class App:
     
     def get_entry(self, event=None):
         """ Gets task from entry widget """
-        self.task_list.append(self.e.get())
-        self.e.delete(0,END)
+        self.task_manager.add_task(
+            self.task_entry_box.get(), self.time_entry.get())
+        self.time_entry.delete(0, END)
+        self.task_entry_box.delete(0,END)
         self.display_text()
         
     def display_text(self):
         """ Make the text widget editable """
         self.task_display.config(state=NORMAL)
         self.task_display.delete(1.0, END)
-        for task in self.task_list:
-            self.task_display.insert(END, task+ "\n")
+        t_list = self.task_manager.get_tasks()
+        for task in t_list:
+            self.task_display.insert(END, task[0]+ ". Time: " + task[1]+"\n")
         self.task_display.config(state=DISABLED)
 
     def quit_button(self, frame):
         """ 
-        Creates teh quit button
+        Creates the quit button
         """
         self.quit_button = Button(
             frame, text = "QUIT", fg="red",
