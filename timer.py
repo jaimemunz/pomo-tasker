@@ -1,9 +1,10 @@
 from Tkinter import *
 import time
+import winsound
 
 class Timer:
 
-    def __init__(self, master, t_var, task_time=60):
+    def __init__(self, master, t_var, task_time=5):
         self.task_length = task_time
         self.root = master
         self.timer_var = StringVar()
@@ -60,7 +61,8 @@ class Timer:
             print timeformat
             self.root.after(1000, self.update_timer, count-1)
         if count == 0:
-            self.task_length = 10
+            self.task_length = 60*25
+            winsound.Beep(500,2000)
             print "Timer done"
 
     def pause_timer_button(self, frame):
